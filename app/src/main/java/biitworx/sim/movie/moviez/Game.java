@@ -10,17 +10,23 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import biitworx.sim.movie.moviez.data.helper.DbHelper;
+
 public class Game extends AppCompatActivity {
 
 
     public static Resources res;
+    public static DbHelper DATA;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         res = getResources();
+        DATA = new DbHelper(this);
 
+        findViewById(R.id.gameback).invalidate();
     }
 
 
