@@ -11,13 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import biitworx.sim.movie.moviez.data.helper.DbHelper;
+import biitworx.sim.movie.moviez.engine.view.Background;
 
 public class Game extends AppCompatActivity {
 
 
     public static Resources res;
     public static DbHelper DATA;
-
+    private Background background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,9 @@ public class Game extends AppCompatActivity {
         res = getResources();
         DATA = new DbHelper(this);
 
-        findViewById(R.id.gameback).invalidate();
+        background = (Background) findViewById(R.id.gameback);
+        background.invalidate();
+
     }
 
 

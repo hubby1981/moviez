@@ -2,6 +2,8 @@ package biitworx.sim.movie.moviez.engine.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -10,7 +12,11 @@ import android.view.View;
  */
 public abstract class Background extends View {
     private Drawer drawer;
+    public Background(Context context){
+        super(context);
+        this.drawer = provideDrawer();
 
+    }
     public Background(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.drawer = provideDrawer();
@@ -20,8 +26,9 @@ public abstract class Background extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
+
         if (drawer != null) {
-            drawer.onDraw(this.getClipBounds(), canvas);
+            drawer.onDraw(canvas.getClipBounds(), canvas);
         }
     }
 

@@ -10,6 +10,9 @@ import biitworx.sim.movie.moviez.engine.view.Drawer;
  * Created by marce_000 on 15.08.2016.
  */
 public class MainBackground extends Background {
+    public MainBackground(Context context){
+        super(context);
+    }
     public MainBackground(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
