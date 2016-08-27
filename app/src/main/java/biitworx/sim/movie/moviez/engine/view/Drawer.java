@@ -20,4 +20,6 @@ public abstract class Drawer {
     protected boolean canDraw(){
         return bounds !=null && canvas !=null;
     }
+
+    public abstract void checkHit(int x,int y);
 }

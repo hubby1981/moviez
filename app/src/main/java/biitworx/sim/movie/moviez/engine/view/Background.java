@@ -32,5 +32,11 @@ public abstract class Background extends View {
         }
     }
 
+    public void checkHit(int x,int y){
+        if (drawer != null) {
+            drawer.checkHit(x,y);
+        }
+    }
+
 
 }

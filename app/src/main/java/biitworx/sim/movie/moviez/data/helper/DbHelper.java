@@ -23,7 +23,7 @@ import biitworx.sim.movie.moviez.data.Setup;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private final static String DBNAME = "sim.games.biitworx.moviez";
-    private final static int version = 1;
+    private final static int version = 14;
     public static final String SELECT_FROM = "SELECT * FROM ";
     public static final String SELECT_ROWID = "SELECT last_insert_rowid() AS rowid FROM ";
     public static final String LIMIT_1 = " LIMIT 1";
@@ -92,6 +92,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public String insert(Object object, boolean forceInsert, SQLiteDatabase dbEx) {
+        if (object == null) return "";
         SQLiteDatabase db = getSqLiteDatabase(dbEx);
 
         if (db != null && db.isOpen()) {
@@ -139,36 +140,43 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-
     public <T> List<T> getData(Class<T> clazz, SQLiteDatabase db2, boolean lazy) {
-        SQLiteDatabase db = getSqLiteDatabase(db2);
-        List<String> fields = ObjectHelper.getFieldsEx(clazz);
         List<T> result = new ArrayList<>();
-        String table = ObjectHelper.getTableNameEx(clazz);
-        if (isInit(db, fields, table)) {
 
-            String st = SELECT_FROM + table;
+        try
+        {
+            SQLiteDatabase db = getSqLiteDatabase(db2);
+
+            List<String> fields = ObjectHelper.getFieldsEx(clazz);
+            String table = ObjectHelper.getTableNameEx(clazz);
+            if (isInit(db, fields, table)) {
+
+                String st = SELECT_FROM + table;
 
 
-            Cursor cursor = db.rawQuery(st, null);
-            while (cursor.moveToNext()) {
-                T obj = createObjInst(clazz, result);
-                int pid = -1;
-                if (obj != null) {
-                    for (String fd : cursor.getColumnNames()) {
-                        pid = extractValues(clazz, cursor, obj, pid, fd);
+                Cursor cursor = db.rawQuery(st, null);
+                while (cursor.moveToNext()) {
+                    T obj = createObjInst(clazz, result);
+                    int pid = -1;
+                    if (obj != null) {
+                        for (String fd : cursor.getColumnNames()) {
+                            pid = extractValues(clazz, cursor, obj, pid, fd);
+                        }
+
+                        if (lazy)
+                            loadReferences(clazz, db, obj);
+
+                        BaseDataObject parsed = safeParseObject(obj);
+                        if (parsed != null)
+                            parsed.importedEx(pid);
                     }
-
-                    if (lazy)
-                        loadReferences(clazz, db, obj);
-
-                    BaseDataObject parsed = safeParseObject(obj);
-                    if (parsed != null)
-                        parsed.importedEx(pid);
                 }
+
+                cursor.close();
+
             }
 
-            cursor.close();
+        }catch(Exception e){
 
         }
 
@@ -215,17 +223,21 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private Object getObject(String value, Field fg) {
-        Object val;
+
         if (fg.getGenericType().equals(int.class)) {
-            val = Integer.parseInt(value);
+            return Integer.parseInt(value);
+        } else if (fg.getGenericType().equals(long.class)) {
+            return  Long.parseLong(value);
         } else if (fg.getGenericType().equals(float.class)) {
-            val = Float.parseFloat(value);
+            return  Float.parseFloat(value);
+        } else if (fg.getGenericType().equals(boolean.class)) {
+            return  Boolean.parseBoolean(value);
         } else if (fg.getGenericType().equals(UUID.class)) {
-            val = UUID.fromString(value);
+            return  UUID.fromString(value);
         } else {
-            val = value;
+            return value;
         }
-        return val;
+
     }
 
     public <T> T getRefs(Class<T> clazz, T obj) {

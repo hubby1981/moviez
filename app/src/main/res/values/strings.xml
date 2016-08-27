@@ -1,4 +1,24 @@
 <resources>
     <string name="app_name">moviez</string>
     <string name="action_settings">Settings</string>
+
+
+
+
+    <string name="menu_0">Office</string>
+    <string name="menu_1">Studio</string>
+    <string name="menu_2">Kino</string>
+    <string name="menu_3">Awards</string>
+    <string name="menu_4">Bank</string>
+    <string name="menu_5">Stars</string>
+    <string name="menu_6">Options</string>
+    <string name="menu_7">Normal</string>
+    <string name="menu_8">Pause</string>
+    <string name="menu_9">Fast</string>
+
+
+    <string name="menu_1_0">Rooms</string>
+    <string name="menu_1_1">Media</string>
+
+
 </resources>
