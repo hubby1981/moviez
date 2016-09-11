@@ -2,6 +2,7 @@ package biitworx.sim.movie.moviez.data.game;
 
 import java.util.List;
 
+import biitworx.sim.movie.moviez.data.game.movie.Actor;
 import biitworx.sim.movie.moviez.data.game.movie.Fokus;
 import biitworx.sim.movie.moviez.data.game.movie.Genre;
 import biitworx.sim.movie.moviez.data.game.movie.Movie;
@@ -16,11 +17,17 @@ public class BaseSetup {
 
     private static DbHelper DATA;
     public static PlayerData playerData;
+    public static List<PlayerData> players;
+    public static List<Genre> genreList;
+    public static List<Fokus> fokusList;
+    public static List<Actor> actorList;
+    public static List<Movie> movies;
     public static void checkSetup(DbHelper data) {
         DATA = data;
-        List<PlayerData> players = DATA.getData(PlayerData.class, DATA.get(), true);
-        List<Genre> genreList = DATA.getData(Genre.class, DATA.get(), true);
-        List<Fokus> fokusList = DATA.getData(Fokus.class, DATA.get(), true);
+        players = DATA.getData(PlayerData.class, DATA.get(), true);
+        genreList = DATA.getData(Genre.class, DATA.get(), true);
+        fokusList = DATA.getData(Fokus.class, DATA.get(), true);
+        actorList = DATA.getData(Actor.class, DATA.get(), true);
 
         generatePlayer(players);
 
@@ -30,8 +37,20 @@ public class BaseSetup {
         generateFokuse(fokusList);
 
 
-        List<Movie> movies = DATA.getData(Movie.class, DATA.get(), true);
+        movies = DATA.getData(Movie.class, DATA.get(), true);
+        generateActors(actorList);
 
+    }
+
+    private static void generateActors(List<Actor> actorList) {
+        if (actorList.size() == 0) {
+            actorList.add(new Actor("John McGormak", 34, 3500, 0).act(3.4f).role(2.1f).diva(1.0f));
+            actorList.add(new Actor("Peter Last", 45, 5000, 0).act(4.4f).role(2.6f).diva(5.0f));
+
+            for (Actor a : actorList)
+                DATA.insert(a, true, DATA.get());
+
+        }
     }
 
     private static void generatePlayer(List<PlayerData> players) {
